@@ -1,0 +1,130 @@
+### Transaction API Testing
+
+### Variables
+@baseUrl = http://localhost:8080/api/transactions
+
+### 1. Create a Transaction
+POST {{baseUrl}}
+Content-Type: application/json
+
+{
+  "customerId": 1,
+  "amount": 100.50,
+  "currency": "USD",
+  "transactionType": "DEPOSIT"
+}
+
+### A. Create with a client-supplied Transaction ID
+### The ID is optional. Reusing an existing ID returns 409 Conflict.
+POST {{baseUrl}}
+Content-Type: application/json
+
+{
+  "transactionId": 1001,
+  "customerId": 1,
+  "amount": 100.50,
+  "currency": "USD",
+  "transactionType": "DEPOSIT"
+}
+
+### A. Duplicate Transaction ID (returns 409 after the request above)
+POST {{baseUrl}}
+Content-Type: application/json
+
+{
+  "transactionId": 1001,
+  "customerId": 1,
+  "amount": 25.00,
+  "currency": "USD",
+  "transactionType": "PAYMENT"
+}
+
+### 2. Create another transaction for the same customer
+POST {{baseUrl}}
+Content-Type: application/json
+
+{
+  "customerId": 1,
+  "amount": 75.25,
+  "currency": "EUR",
+  "transactionType": "WITHDRAWAL"
+}
+
+### 3. Create transaction for different customer
+POST {{baseUrl}}
+Content-Type: application/json
+
+{
+  "customerId": 2,
+  "amount": 500.00,
+  "currency": "GBP",
+  "transactionType": "TRANSFER"
+}
+
+### 4. Get Transaction by ID (replace 1 with actual ID from response)
+GET {{baseUrl}}/1
+
+### B. Get a missing transaction (returns 404)
+GET {{baseUrl}}/99999
+
+### 5. Get All Transactions for Customer 1
+GET {{baseUrl}}/customer/1
+
+### 6. Get All Transactions for Customer 2
+GET {{baseUrl}}/customer/2
+
+### 7. Get All Transactions
+GET {{baseUrl}}
+
+### 8. Update Transaction Status (replace 1 with actual ID)
+PUT {{baseUrl}}/1/status?status=COMPLETED
+
+### 9. Update to Failed Status
+PUT {{baseUrl}}/1/status?status=FAILED
+
+### 10. Update to Cancelled Status
+PUT {{baseUrl}}/1/status?status=CANCELLED
+
+### C. Invalid status transition (returns 409 after transaction 1 is terminal)
+PUT {{baseUrl}}/1/status?status=FAILED
+
+### D. Get all transactions for a customer (individual request)
+GET {{baseUrl}}/customer/1
+
+### Test Invalid Requests
+
+### Test - Invalid Amount (0)
+POST {{baseUrl}}
+Content-Type: application/json
+
+{
+  "customerId": 1,
+  "amount": 0,
+  "currency": "USD",
+  "transactionType": "DEPOSIT"
+}
+
+### Test - Invalid Currency (too long)
+POST {{baseUrl}}
+Content-Type: application/json
+
+{
+  "customerId": 1,
+  "amount": 100.00,
+  "currency": "USDA",
+  "transactionType": "DEPOSIT"
+}
+
+### Test - Null Customer ID
+POST {{baseUrl}}
+Content-Type: application/json
+
+{
+  "customerId": null,
+  "amount": 100.00,
+  "currency": "USD",
+  "transactionType": "DEPOSIT"
+}
+
+### Test - Get Non-Existent Transaction
+GET {{baseUrl}}/99999
