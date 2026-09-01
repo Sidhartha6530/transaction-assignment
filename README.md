@@ -14,7 +14,6 @@ The implemented service supports:
 2. **Retrieving transactions** by ID with `404 Not Found` handling.
 3. **Updating transaction status** using explicit lifecycle rules.
 4. **Retrieving transactions for a customer** using a normalized numeric customer ID.
-5. **Retrieving all stored transactions**.
 
 ---
 
@@ -179,38 +178,13 @@ curl http://localhost:8080/api/transactions/customer/74125896
     "amount": 150.75,
     "currency": "USD",
     "transactionType": "PAYMENT",
-    "transactionStatus": "PENDING",
+    "transactionStatus": "COMPLETED",
     "createdAt": "2026-08-31T12:00:00",
     "updatedAt": null
   }
 ]
 ```
 
-### E. Get All Transactions
-
-- **Endpoint**: `GET /api/transactions`
-- **curl**:
-
-```bash
-curl http://localhost:8080/api/transactions
-```
-
-- **Response**: `200 OK` with all transactions currently stored in H2.
-
-```json
-[
-  {
-    "transactionId": "TP7412589638",
-    "customerId": "74125896",
-    "amount": 150.75,
-    "currency": "USD",
-    "transactionType": "PAYMENT",
-    "transactionStatus": "PENDING",
-    "createdAt": "2026-08-31T12:00:00",
-    "updatedAt": null
-  }
-]
-```
 
 ---
 
