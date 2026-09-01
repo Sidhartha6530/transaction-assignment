@@ -135,7 +135,7 @@ curl http://localhost:8080/api/transactions/TP7412589638
 ### C. Update Transaction Status
 
 - **Endpoint**: `PUT /api/transactions/{id}/status?status={status}`
-- **Example**: `PUT /api/transactions/TP1234567890/status?status=COMPLETED`
+- **Example**: `PUT /api/transactions/TP7412589638/status?status=COMPLETED`
 - **curl**:
 
 ```bash
